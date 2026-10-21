@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 9 Assistant</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <main class="app-shell">
+        <section class="panel hero-panel">
+            <div>
+                <p class="eyebrow">Chapter 9 Assignment</p>
+                <h1>Minimal AI Assistant</h1>
+                <p class="lede">This small app shows memory, tool orchestration, confirmation before actions, and an Ollama-backed response loop.</p>
+            </div>
+            <div class="status-row">
+                <span id="health-pill" class="pill">Checking Ollama...</span>
+                <span id="model-pill" class="pill pill-muted"></span>
+            </div>
+        </section>
+
+        <section class="workspace">
+            <div class="panel composer-panel">
+                <label class="label" for="message-input">Ask for help</label>
+                <textarea id="message-input" rows="5" placeholder="Example: My internet has been unstable all morning and Zoom keeps dropping."></textarea>
+                <div class="button-row">
+                    <button id="send-button" class="button button-primary">Send</button>
+                    <button class="button button-secondary" data-sample="My internet has been unstable all morning and Zoom keeps dropping.">Load network sample</button>
+                    <button class="button button-secondary" data-sample="I cannot sign in to the payroll portal and my password reset link expired.">Load access sample</button>
+                </div>
+                <div id="confirmation-box" class="confirmation hidden">
+                    <p id="confirmation-text"></p>
+                    <div class="button-row">
+                        <button id="approve-button" class="button button-primary">Approve</button>
+                        <button id="reject-button" class="button button-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel response-panel">
+                <div class="panel-header">
+                    <h2>Assistant output</h2>
+                    <span id="tool-badge" class="pill pill-muted">No tool yet</span>
+                </div>
+                <div id="response-content" class="response-content">Send a message to begin.</div>
+            </div>
+
+            <div class="panel memory-panel">
+                <div class="panel-header">
+                    <h2>Session memory</h2>
+                    <span id="memory-flag" class="pill pill-muted">Waiting</span>
+                </div>
+                <div id="memory-content" class="memory-list"></div>
+            </div>
+        </section>
+    </main>
+    <script src="/static/app.js"></script>
+</body>
+</html>

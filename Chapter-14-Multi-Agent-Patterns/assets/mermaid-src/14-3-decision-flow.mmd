@@ -1,0 +1,22 @@
+flowchart TD
+    A[Define the task] --> B{Independent subtasks?}
+    B -->|Yes| C[Start with Supervisor-Worker]
+    B -->|No| D{Need explicit competing arguments?}
+
+    D -->|Yes| E[Choose Debate]
+    D -->|No| F{Need broad strategy exploration?}
+
+    F -->|Yes| G[Choose Swarm]
+    F -->|No| H{Need formal multi-party approval?}
+
+    H -->|Yes| I[Choose Committee]
+    H -->|No| J[Choose Peer-to-Peer]
+
+    C --> K{Latency/cost acceptable?}
+    E --> K
+    G --> K
+    I --> K
+    J --> K
+
+    K -->|Yes| L[Ship and monitor]
+    K -->|No| M[Fallback to simpler pattern]

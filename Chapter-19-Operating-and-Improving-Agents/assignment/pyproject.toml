@@ -1,0 +1,9 @@
+[project]
+name = "chapter19-operating-assignment"
+version = "0.1.0"
+description = "Deterministic operating and improvement assignment"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

@@ -1,0 +1,17 @@
+{
+  "book_flight": {
+    "max_retries": 2,
+    "requires_approval": false,
+    "approval_prompt": ""
+  },
+  "reserve_hotel": {
+    "max_retries": 0,
+    "requires_approval": true,
+    "approval_prompt": "Approve hotel booking?"
+  },
+  "build_itinerary": {
+    "max_retries": 0,
+    "requires_approval": false,
+    "approval_prompt": ""
+  }
+}

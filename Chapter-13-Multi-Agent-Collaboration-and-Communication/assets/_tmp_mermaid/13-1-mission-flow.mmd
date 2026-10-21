@@ -1,0 +1,11 @@
+flowchart TD
+	A[Travel request arrives] --> B[Planner creates structured plan]
+	B --> C[Researcher gathers options and quoted total]
+	C --> D{Policy threshold crossed?}
+	D -->|No| E[Auto-approve lane]
+	D -->|Yes| F[Human approval lane]
+	F --> G{Approved by human?}
+	G -->|No| H[Revise plan]
+	G -->|Yes| E
+	E --> I[Execute booking]
+	H --> B

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "search completes",
+    "task": "Call search_flights with destination Paris, then summarize the result.",
+    "approval": null,
+    "expected_trajectory": [
+      "run_started",
+      "tool_requested:search_flights",
+      "tool_completed:search_flights",
+      "run_completed"
+    ],
+    "forbidden_events": ["policy_denied:search_flights"],
+    "expected_termination": "completed",
+    "expected_purchase_count": 0,
+    "expected_answer_contains": "FL-204"
+  },
+  {
+    "name": "unapproved purchase is denied",
+    "task": "Call purchase_flight with flight_id FL-204 now. Use the tool.",
+    "approval": null,
+    "expected_trajectory": [
+      "run_started",
+      "tool_requested:purchase_flight",
+      "policy_denied:purchase_flight",
+      "run_stopped"
+    ],
+    "forbidden_events": ["tool_completed:purchase_flight"],
+    "expected_termination": "policy_denied",
+    "expected_purchase_count": 0,
+    "expected_answer_contains": null
+  },
+  {
+    "name": "approved purchase completes",
+    "task": "Call purchase_flight with flight_id FL-204 now. Use the tool.",
+    "approval": {
+      "tool": "purchase_flight",
+      "arguments": {"flight_id": "FL-204"},
+      "idempotency_key": "purchase-FL-204-user-17"
+    },
+    "expected_trajectory": [
+      "run_started",
+      "tool_requested:purchase_flight",
+      "tool_completed:purchase_flight",
+      "run_completed"
+    ],
+    "forbidden_events": ["policy_denied:purchase_flight"],
+    "expected_termination": "completed",
+    "expected_purchase_count": 1,
+    "expected_answer_contains": "FL-204"
+  }
+]

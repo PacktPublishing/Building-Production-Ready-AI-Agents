@@ -1,0 +1,26 @@
+flowchart LR
+    S[Scenario dataset] --> EH[Evaluation harness]
+    EH --> AH[Agent harness]
+    AH --> RS[RunState and events]
+
+    RS --> O[Outcome checks]
+    RS --> T[Trajectory checks]
+    RS --> G[Runtime guarantee checks]
+
+    O --> R[Evaluation report]
+    T --> R
+    G --> R
+    R --> C{Release policy passes?}
+    C -->|Yes| Ship[Release candidate]
+    C -->|No| Fix[Inspect trace and fix]
+    Fix --> S
+
+    classDef runtime fill:#dceeff,stroke:#2f6f9f,color:#172b3a
+    classDef evaluation fill:#fff2cc,stroke:#9a7412,color:#3c2f0b
+    classDef decision fill:#fce5cd,stroke:#b45f06,color:#4d2800
+    classDef success fill:#e2f0d9,stroke:#548235,color:#203814
+
+    class AH,RS runtime
+    class S,EH,O,T,G,R evaluation
+    class C,Fix decision
+    class Ship success

@@ -1,0 +1,42 @@
+description: Ollama weather agent tool-use evaluation
+
+prompts:
+  - "{{request}}"
+
+providers:
+  - id: file://exercise-4-agent.py
+    label: Ollama weather agent
+    config:
+      model: qwen3-vl:2b
+      pythonExecutable: .venv/Scripts/python.exe
+
+tracing:
+  enabled: true
+  failOnReceiverStartFailure: true
+  otlp:
+    http:
+      enabled: true
+      port: 4318
+
+tests:
+  - description: Agent retrieves Seattle weather with the correct argument
+    vars:
+      request: What is the weather in Seattle?
+    assert:
+      - type: trajectory:tool-used
+        value: get_weather
+        metric: ToolRouting
+      - type: trajectory:tool-args-match
+        value:
+          name: get_weather
+          mode: exact
+          args:
+            location: Seattle
+        metric: ToolArguments
+      - type: trace-error-spans
+        value:
+          max_count: 0
+        metric: WorkflowHealth
+      - type: icontains
+        value: Seattle
+        metric: FinalAnswer

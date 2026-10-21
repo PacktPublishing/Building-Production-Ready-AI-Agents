@@ -1,0 +1,19 @@
+[project]
+name = "chapter16-eval-solutions"
+version = "0.1.0"
+description = "Chapter 16 evaluation exercise solutions"
+readme = "exercise-2.md"
+requires-python = ">=3.11"
+dependencies = [
+  "ollama>=0.3.0",
+  "opentelemetry-api>=1.36.0",
+  "opentelemetry-exporter-otlp-proto-http>=1.36.0",
+  "opentelemetry-sdk>=1.36.0",
+]
+
+[tool.uv]
+package = false
+
+[build-system]
+requires = ["hatchling>=1.24.0"]
+build-backend = "hatchling.build"

@@ -1,0 +1,79 @@
+{
+  "session_id": "7b7d86c0-c146-477f-8288-fe6024a2c34e",
+  "request": {
+    "destination": "Tokyo",
+    "budget": 1800,
+    "month": "next month",
+    "travelers": 2
+  },
+  "policy": {
+    "approval_limit": 1200,
+    "blocked_limit": 2200
+  },
+  "quotes": {
+    "flight": 907,
+    "hotel": 520,
+    "insurance": 110,
+    "total": 1537
+  },
+  "status": "awaiting_approval",
+  "current_checkpoint": "awaiting_approval",
+  "checkpoint_ready": true,
+  "booking_reference": null,
+  "last_message": "Start by telling me where you want to go, your budget, the month, and how many travelers to plan for.",
+  "trace": [
+    {
+      "ts": "2026-06-19T12:51:29.006050+00:00",
+      "step": "system",
+      "message": "Session created.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T12:51:30.696153+00:00",
+      "step": "user",
+      "message": "Received user message.",
+      "data": {
+        "message": "Book a trip to Tokyo next month with budget 1800 for 2 travelers"
+      }
+    },
+    {
+      "ts": "2026-06-19T12:51:30.696153+00:00",
+      "step": "planner",
+      "message": "Applied extracted updates.",
+      "data": {
+        "updated_fields": [
+          "destination",
+          "budget",
+          "travelers",
+          "month"
+        ]
+      }
+    },
+    {
+      "ts": "2026-06-19T12:51:30.696153+00:00",
+      "step": "planner",
+      "message": "Gathering flight, hotel, and insurance quotes in parallel.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T12:51:30.698678+00:00",
+      "step": "planner",
+      "message": "Estimated travel quotes.",
+      "data": {
+        "flight": 907,
+        "hotel": 520,
+        "insurance": 110,
+        "total": 1537
+      }
+    },
+    {
+      "ts": "2026-06-19T12:51:30.700694+00:00",
+      "step": "checkpoint",
+      "message": "Saved checkpoint 'post_quote_review'.",
+      "data": {
+        "path": "C:\\Users\\chnoring\\Documents\\books\\agentic-book\\Chapter-13-Multi-Agent-Collaboration-and-Communication\\assignment\\runtime\\checkpoints\\7b7d86c0-c146-477f-8288-fe6024a2c34e.json",
+        "checkpoint": "post_quote_review"
+      }
+    }
+  ]
+}

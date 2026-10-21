@@ -1,0 +1,255 @@
+[
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "App crash.",
+    "recommended_actions": [
+      "Install/Update Software"
+    ],
+    "reasoning": "Bug."
+  },
+  {
+    "ticket_id": "T-272675",
+    "category": "Account/Access",
+    "priority": "high",
+    "summary": "User Bob is unable to access a shared drive, receiving an 'Access Denied' error, while his colleague can still access it.",
+    "recommended_actions": [
+      "Grant/Modify Access Permissions",
+      "Monitor and Log"
+    ],
+    "reasoning": "The high priority issue of User Bob being unable to access a shared drive while his colleague can, suggests a permissions problem. Granting or modifying access permissions for the affected user is necessary to resolve this issue. Monitoring and logging the activity will help identify any unusual behavior or potential errors that may have caused the problem."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "No summary available.",
+    "recommended_actions": [
+      "Monitor and Log"
+    ],
+    "reasoning": "No reasoning provided."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "No summary available.",
+    "recommended_actions": [
+      "Monitor and Log"
+    ],
+    "reasoning": "No reasoning provided."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "App crash.",
+    "recommended_actions": [
+      "Install/Update Software"
+    ],
+    "reasoning": "Bug."
+  },
+  {
+    "ticket_id": "T-605154",
+    "category": "Security Incident",
+    "priority": "high",
+    "summary": "Potential Phishing Attempt - Suspicious Email Received",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "The ticket describes a potential security incident involving a phishing attempt. The email appears to be from the CEO and requests a large sum of money, which is unusual and potentially fraudulent."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "App crash.",
+    "recommended_actions": [
+      "Install/Update Software"
+    ],
+    "reasoning": "Bug."
+  },
+  {
+    "ticket_id": "T-001",
+    "category": "Hardware Issue",
+    "priority": "high",
+    "summary": "Laptop won't turn on post-Windows update, urgent need to prepare for an upcoming client presentation.",
+    "recommended_actions": [
+      "Restart Device"
+    ],
+    "reasoning": "The laptop failing to power on is a hardware issue likely related to the recent Windows update. Immediate action with restart device may resolve temporary issues caused by software changes."
+  },
+  {
+    "ticket_id": "T-002",
+    "category": "Account/Access",
+    "priority": "medium",
+    "summary": "Bob reports inability to access a shared company resource, with the issue seemingly isolated as his immediate neighbor is unaffected.",
+    "recommended_actions": [
+      "Monitor and Log"
+    ],
+    "reasoning": "Given that only one user (Bob) has this problem while others can still use it without issues suggests a possible misconfiguration specific to the affected user\u2019th eaccount, rather than an issue with shared drive accessibility itself. This is not urgent but requires attention as Bob's work may be impacted."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "App crash.",
+    "recommended_actions": [
+      "Install/Update Software"
+    ],
+    "reasoning": "Bug."
+  },
+  {
+    "ticket_id": "test-1",
+    "category": "Hardware Issue",
+    "priority": "high",
+    "summary": "Laptop screen flickers post-Windows update.",
+    "recommended_actions": [
+      "Restart Device"
+    ],
+    "reasoning": "A restart may resolve temporary glitches caused by the recent Windows update."
+  },
+  {
+    "ticket_id": "test-1",
+    "category": "Hardware Issue",
+    "priority": "medium",
+    "summary": "Laptop Screen Flickering After Windows Update",
+    "recommended_actions": [
+      "Restart Device"
+    ],
+    "reasoning": "The user's laptop screen flickering could be due to a hardware issue related to the graphics card or monitor, which is causing the flicker. A restart of the device can help resolve this issue temporarily."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "critical",
+    "summary": "Phishing email impersonating CEO requesting wire transfer.",
+    "recommended_actions": [
+      "Escalate to L3/Security Team"
+    ],
+    "reasoning": "Potential CEO fraud / business email compromise."
+  },
+  {
+    "ticket_id": "T-010",
+    "category": "Software Issue",
+    "priority": "medium",
+    "summary": "App crash.",
+    "recommended_actions": [
+      "Install/Update Software"
+    ],
+    "reasoning": "Bug."
+  },
+  {
+    "ticket_id": "T-001",
+    "category": "Hardware Issue",
+    "priority": "high",
+    "summary": "Laptop not turning on after recent Windows update - urgent",
+    "recommended_actions": [
+      "Restart Device",
+      "Monitor and Log"
+    ],
+    "reasoning": "Alice's laptop is unable to turn on, which suggests a hardware issue related to the power supply or motherboard. The urgency of this ticket indicates that Alice has an important client presentation in 2 hours and needs immediate assistance."
+  },
+  {
+    "ticket_id": "T-003",
+    "category": "Security Incident",
+    "priority": "high",
+    "summary": "Suspicious Email Requesting Wire Transfer",
+    "recommended_actions": [
+      "Monitor and Log"
+    ],
+    "reasoning": "The email appears suspicious, especially given the request for a wire transfer and the unusual sender's address. Reporting it to security is recommended as it could indicate potential fraud or unauthorized access."
+  },
+  {
+    "ticket_id": "T-005",
+    "category": "Software Issue",
+    "priority": "high",
+    "summary": "Outlook Sync Issues",
+    "recommended_actions": [
+      "Check Network Configuration",
+      "Restart Device"
+    ],
+    "reasoning": "The user is experiencing a software issue with Outlook not syncing emails, which could be due to network connectivity problems or an outdated version of the application."
+  }
+]

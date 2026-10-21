@@ -1,0 +1,8 @@
+flowchart TD
+  A[Request intake] --> B[Input and policy validation]
+  B -->|Invalid| C[Stop early and return remediation]
+  B -->|Valid| D[Action tiering]
+  D --> E[Execute action]
+  D --> F[Retry and fallback]
+  E --> G[Trace and partial status]
+  F --> G

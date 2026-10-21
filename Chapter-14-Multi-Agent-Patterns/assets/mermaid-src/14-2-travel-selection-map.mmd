@@ -1,0 +1,21 @@
+flowchart TB
+    R[Travel request arrives]
+
+    R --> Q1{Can tasks split cleanly and run in parallel?}
+    Q1 -->|Yes| SW[Supervisor-Worker]
+    Q1 -->|No| Q2{Do we need explicit opposing reasoning?}
+
+    Q2 -->|Yes| DB[Debate]
+    Q2 -->|No| Q3{Do we want many independent strategies in parallel?}
+
+    Q3 -->|Yes| SM[Swarm]
+    Q3 -->|No| Q4{Do multiple stakeholders need approval?}
+
+    Q4 -->|Yes| CM[Committee]
+    Q4 -->|No| P2P[Peer-to-Peer]
+
+    SW --- SWN[Fast orchestration, central control]
+    DB --- DBN[Structured tradeoff reasoning]
+    SM --- SMN[High diversity, higher compute]
+    CM --- CMN[Governance, vote, and audit trail]
+    P2P --- P2PN[Direct bargaining between equals]

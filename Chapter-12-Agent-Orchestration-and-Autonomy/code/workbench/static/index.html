@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orchestration Workbench</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: #fffdf8;
+      --ink: #1f2a36;
+      --accent: #0f6c5f;
+      --accent-soft: #d6efe9;
+      --warn: #9a5a00;
+      --line: #d8d1c5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Source Serif 4", Georgia, serif;
+      color: var(--ink);
+      background: radial-gradient(circle at 20% 10%, #fff8ef, var(--bg));
+    }
+    .shell {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      gap: 18px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(26, 39, 51, 0.08);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+    h3 {
+      margin: 14px 0 8px;
+    }
+    p {
+      margin: 0 0 12px;
+      line-height: 1.35;
+    }
+    label {
+      display: block;
+      margin: 10px 0 6px;
+      font-weight: 600;
+    }
+    textarea,
+    select,
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      font: inherit;
+      background: #fff;
+    }
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .small {
+      font-size: 12px;
+      color: #5b6c79;
+    }
+    .palette {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+    .palette-list {
+      min-height: 52px;
+      border: 1px dashed #b6c9c1;
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #f8fcfb;
+    }
+    .palette-list.is-over,
+    .canvas.is-over {
+      border-color: var(--accent);
+      background: #eefaf7;
+    }
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+    }
+    .canvas {
+      position: relative;
+      width: 100%;
+      height: 620px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #fff;
+      background-image:
+        linear-gradient(rgba(15, 108, 95, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 108, 95, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .guide-label {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      border: 1px solid #c6dacf;
+      background: #f5fffb;
+      color: #2f554d;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 4px 8px;
+      border-radius: 999px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .guide-line {
+      position: absolute;
+      pointer-events: none;
+      border-color: rgba(46, 90, 82, 0.35);
+    }
+    .guide-line.vertical {
+      border-left: 1px dashed rgba(46, 90, 82, 0.4);
+    }
+    .guide-line.horizontal {
+      border-top: 1px dashed rgba(46, 90, 82, 0.4);
+    }
+    .node {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      border: 1px solid #89b8ac;
+      border-radius: 10px;
+      background: #fff;
+      color: #1f2a36;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 130px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(20, 40, 45, 0.09);
+      user-select: none;
+      cursor: grab;
+      overflow: visible;
+    }
+    .node-label {
+      display: block;
+    }
+    .node-response {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 130px;
+      max-width: 220px;
+      border: 1px solid #c8d5de;
+      background: #f8fbff;
+      color: #2c3e50;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.25;
+      padding: 4px 6px;
+      pointer-events: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .node-response.has-value {
+      opacity: 1;
+    }
+    .node.state-pending {
+      border-color: #89b8ac;
+      background: #ffffff;
+    }
+    .node.state-done {
+      border-color: #438d66;
+      background: #e8f8ee;
+      color: #1e5138;
+    }
+    .node.state-active {
+      border-color: #c67700;
+      background: #fff3dc;
+      color: #6f4300;
+      box-shadow: 0 0 0 2px rgba(198, 119, 0, 0.15), 0 8px 18px rgba(20, 40, 45, 0.18);
+    }
+    .node.dragging {
+      cursor: grabbing;
+      opacity: 0.92;
+      box-shadow: 0 8px 18px rgba(20, 40, 45, 0.18);
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, #0f6c5f, #1b8c77);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #2f6f62;
+    }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 14px;
+    }
+    .status-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      margin-top: 10px;
+    }
+    .result-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    .result-ok {
+      color: #1e5138;
+      background: #e8f8ee;
+      border: 1px solid #98c6a8;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .result-warn {
+      color: #6f4300;
+      background: #fff3dc;
+      border: 1px solid #e2bf88;
+      border-radius: 8px;
+      padding: 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .itinerary-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .service-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+      margin-top: 10px;
+      font-size: 13px; 
+    }
+    .service-box ol {
+      margin-top: 6px;
+    }
+    .status-line {
+      margin: 0 0 6px;
+      font-size: 13px;
+    }
+    .status-list {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      margin-right: 8px;
+    }
+    .warn {
+      background: #ffe8c2;
+      color: var(--warn);
+    }
+    ol {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .trace {
+      max-height: 420px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      background: #fff;
+    }
+    .event {
+      border-left: 3px solid var(--accent);
+      padding: 8px;
+      margin: 0 0 8px;
+      background: #f7fffc;
+    }
+    .event strong {
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 8px 0 0;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 28, 35, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 20px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal {
+      width: min(520px, 100%);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+      padding: 16px;
+    }
+    .modal h3 {
+      margin: 0 0 8px;
+    }
+    .modal p {
+      margin: 0 0 8px;
+    }
+    .modal ul {
+      margin: 8px 0 0;
+      padding-left: 18px;
+    }
+    .modal .meta {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfbfb;
+      padding: 10px;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .modal-actions button {
+      margin-top: 0;
+    }
+    .modal-actions .deny {
+      background: #9a3a3a;
+    }
+    .modal-actions .close {
+      background: #355d7a;
+    }
+    @media (max-width: 1060px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+      .canvas {
+        height: 560px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="card">
+      <h1>Orchestration Workbench</h1>
+      <p>Build your workflow by dragging blocks freely onto the canvas. Guides for START, FORK, JOIN, END stay visible per strategy.</p>
+
+      <div class="controls-grid">
+        <div>
+          <label for="prompt">User request</label>
+          <textarea id="prompt" rows="3">Book a trip to Tokyo next month with budget 1800 for 1 traveler</textarea>
+        </div>
+        <div>
+          <label for="strategy">Strategy</label>
+          <select id="strategy">
+            <option value="sequential">Sequential</option>
+            <option value="parallel">Parallel</option>
+            <option value="routed" selected>Routed</option>
+          </select>
+        </div>
+        <div>
+          <label for="approvalLimit">Approval limit</label>
+          <input id="approvalLimit" type="number" placeholder="1200" />
+        </div>
+        <div>
+          <label for="blockedLimit">Blocked limit</label>
+          <input id="blockedLimit" type="number" placeholder="2000" />
+        </div>
+      </div>
+
+      <div class="quote-grid">
+        <div>
+          <label for="flightQuote">Flight quote override</label>
+          <input id="flightQuote" type="number" placeholder="auto" min="0" />
+        </div>
+        <div>
+          <label for="hotelQuote">Hotel quote override</label>
+          <input id="hotelQuote" type="number" placeholder="auto" min="0" />
+        </div>
+        <div>
+          <label for="insuranceQuote">Insurance quote override</label>
+          <input id="insuranceQuote" type="number" placeholder="auto" min="0" />
+        </div>
+      </div>
+      <p class="small">Leave override fields empty to use deterministic quote estimation. Set one or more values to force routed outcomes.</p>
+
+      <label for="approvalDecision">Approval decision (routed)</label>
+      <select id="approvalDecision">
+        <option value="">pending</option>
+        <option value="approve">approve</option>
+        <option value="deny">deny</option>
+      </select>
+      <p class="small">Drag nodes from the palette onto canvas to add them. Drag a canvas node back to the palette bucket to remove it (or double-click).</p>
+
+      <div class="palette">
+        <h3>Palette Bucket</h3>
+        <div id="palette" class="palette-list"></div>
+      </div>
+
+      <div class="canvas-wrap">
+        <div id="canvas" class="canvas"></div>
+      </div>
+
+      <div class="button-row">
+        <button id="runBtn" type="button">Run Simulation</button>
+        <button id="resetBlocks" class="secondary" type="button">Reset Canvas</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div id="summaryLine">
+        <span class="pill" id="routePill">route: -</span>
+        <span class="pill warn" id="questionPill">questions: 0</span>
+      </div>
+
+      <div class="result-grid">
+        <div>
+          <h3>Questions asked</h3>
+          <ol id="questions"></ol>
+
+          <div class="status-box">
+            <p class="status-line"><strong>Current step:</strong> <span id="currentStep">-</span></p>
+            <p class="status-line"><strong>Ran steps:</strong></p>
+            <ol class="status-list" id="ranSteps"></ol>
+            <p class="status-line"><strong>Pending steps:</strong></p>
+            <ol class="status-list" id="pendingSteps"></ol>
+          </div>
+
+          <div class="result-box">
+            <p class="status-line"><strong>Execution outcome</strong></p>
+            <div id="executionOutcome" class="result-warn">Run a simulation to see whether booking executed.</div>
+            <ul id="itineraryList" class="itinerary-list"></ul>
+          </div>
+
+          <div class="service-box">
+            <p class="status-line"><strong>Service responses per traversed step</strong></p>
+            <ol id="serviceResponses"></ol>
+          </div>
+
+          <h3>Ollama narration</h3>
+          <pre id="narration">Run a simulation to generate narration.</pre>
+        </div>
+        <div>
+          <h3>Run trace</h3>
+          <div class="trace" id="events"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="approvalModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="approvalTitle">
+    <div class="modal">
+      <h3 id="approvalTitle">Approval Required</h3>
+      <p id="approvalReason">This run reached the approval gate. Do you approve execution to continue?</p>
+      <div class="meta">
+        <p><strong>User budget:</strong> <span id="approvalBudget">-</span></p>
+        <p><strong>Policy limits:</strong> <span id="approvalLimits">-</span></p>
+        <p><strong>Estimated total:</strong> <span id="approvalEstimate">-</span></p>
+      </div>
+      <p><strong>If approved, the system will continue with:</strong></p>
+      <ul id="approvalWillRun"></ul>
+      <p><strong>If denied:</strong> the run stops and no booking side effects are executed.</p>
+      <div class="modal-actions">
+        <button id="approveBtn" type="button">Approve</button>
+        <button id="denyBtn" class="deny" type="button">Deny</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="itineraryModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="itineraryTitle">
+    <div class="modal">
+      <h3 id="itineraryTitle">Trip Itinerary Confirmed</h3>
+      <p id="itineraryRouteNote">Booking was executed by the selected route.</p>
+      <div class="meta">
+        <p><strong>Destination:</strong> <span id="itineraryDestination">-</span></p>
+        <p><strong>Month:</strong> <span id="itineraryMonth">-</span></p>
+        <p><strong>Travelers:</strong> <span id="itineraryTravelers">-</span></p>
+      </div>
+      <p><strong>What was booked:</strong></p>
+      <ul id="itineraryBookedItems"></ul>
+      <div class="modal-actions">
+        <button id="closeItineraryBtn" class="close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="blockedModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="blockedTitle">
+    <div class="modal">
+      <h3 id="blockedTitle">Execution Blocked</h3>
+      <p>The routed policy selected the blocked path.</p>
+      <div class="meta">
+        <p><strong>Reason:</strong> <span id="blockedReason">-</span></p>
+      </div>
+      <p>No booking side effects were executed.</p>
+      <div class="modal-actions">
+        <button id="closeBlockedBtn" class="close" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+flowchart LR
+    A[Choose two candidate patterns] --> B[Run shared scenario set]
+    B --> C[Capture traces and metrics]
+    C --> D[Score latency cost quality]
+    D --> E[Compare against single-agent baseline]
+    E --> F{Meets target?}
+    F -->|Yes| G[Adopt pattern in production]
+    F -->|No| H[Adjust pattern or switch topology]
+    H --> B

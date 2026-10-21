@@ -1,0 +1,10 @@
+{
+  "agent_version": "travel-agent-2026.07.3",
+  "source_revision": "local-example",
+  "model": "qwen2.5:1.5b",
+  "prompt_version": "travel-system-v12",
+  "policy_version": "purchase-policy-v4",
+  "tool_schema_version": "travel-tools-v7",
+  "evaluation_dataset": "travel-critical-v9",
+  "environment": "local"
+}

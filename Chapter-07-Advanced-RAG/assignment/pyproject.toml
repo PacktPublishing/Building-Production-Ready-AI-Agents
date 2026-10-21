@@ -1,0 +1,13 @@
+[project]
+name = "assignment"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.116.1",
+    "graphqlite>=0.4.3",
+    "ollama>=0.6.1",
+    "pydantic>=2.12.5",
+    "uvicorn>=0.35.0",
+]

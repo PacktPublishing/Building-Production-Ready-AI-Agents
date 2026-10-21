@@ -1,0 +1,46 @@
+flowchart TB
+    subgraph A[Supervisor-Worker]
+        S[Supervisor]
+        W1[Worker 1]
+        W2[Worker 2]
+        W3[Worker 3]
+        S --> W1
+        S --> W2
+        S --> W3
+        W1 --> S
+        W2 --> S
+        W3 --> S
+    end
+
+    subgraph B[Debate]
+        D1[Debater A]
+        D2[Debater B]
+        J[Judge]
+        D1 --> J
+        D2 --> J
+    end
+
+    subgraph C[Swarm]
+        P1[Planner 1]
+        P2[Planner 2]
+        P3[Planner 3]
+        M[Merger]
+        P1 --> M
+        P2 --> M
+        P3 --> M
+    end
+
+    subgraph D[Committee]
+        C1[Member 1]
+        C2[Member 2]
+        C3[Member 3]
+        C1 <--> C2
+        C2 <--> C3
+        C1 <--> C3
+    end
+
+    subgraph E[Peer-to-Peer]
+        P2P1[Peer A]
+        P2P2[Peer B]
+        P2P1 <--> P2P2
+    end

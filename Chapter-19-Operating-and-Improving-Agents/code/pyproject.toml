@@ -1,0 +1,9 @@
+[project]
+name = "chapter19-operating-agents"
+version = "0.1.0"
+description = "Production monitoring and improvement exercises for Chapter 19"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false

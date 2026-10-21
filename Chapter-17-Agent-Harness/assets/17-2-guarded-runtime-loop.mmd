@@ -1,0 +1,23 @@
+flowchart TD
+    U[Task enters harness] --> S[Create RunState]
+    S --> B{Budget remains?}
+    B -->|No| X[Stop: budget exhausted]
+    B -->|Yes| M[Call model]
+    M --> F{Final response?}
+    F -->|Yes| C[Stop: completed]
+    F -->|No, tool requested| V[Validate request]
+    V --> P{Policy allows action?}
+    P -->|No| D[Record denial and stop]
+    P -->|Yes| T[Execute or reuse in-process result]
+    T --> E[Record result and update state]
+    E --> B
+
+    classDef decision fill:#fff2cc,stroke:#9a7412,color:#3c2f0b
+    classDef stop fill:#f4cccc,stroke:#a61c00,color:#4c0c00
+    classDef work fill:#dceeff,stroke:#2f6f9f,color:#172b3a
+    classDef success fill:#e2f0d9,stroke:#548235,color:#203814
+
+    class B,F,P decision
+    class X,D stop
+    class U,S,M,V,T,E work
+    class C success

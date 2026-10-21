@@ -1,0 +1,26 @@
+{
+  "agent_version": "travel-agent-2026.08.2",
+  "artifact_digest": "sha256:91a1165d9d24bad3148aba49c781c9ba0e023c5d3e792a960cfd303c247cf4aa",
+  "build_attestation": {
+    "issuer": "chapter-ci",
+    "subject": "sha256:91a1165d9d24bad3148aba49c781c9ba0e023c5d3e792a960cfd303c247cf4aa",
+    "signature": "hmac-sha256:b7fcdf6eccb8f35b39831e7e6a82d499e93b8e56515c614b820bf2aec4d015ab"
+  },
+  "dependency_lock_digest": "sha256:7bf2d73346dbc0d9ac5cc6bc7aeacb44e3adf987c11aeef7c5528c1a79531055",
+  "source_revision": "local-example",
+  "model": "qwen2.5:1.5b",
+  "model_digest": "sha256:46a7fdadcb4d5c007019a9af98c586ee443ed2cb82dfca6bdb16cb23401cea3c",
+  "prompt_version": "travel-system-v14",
+  "prompt_digest": "sha256:3c44de119d264a265c32a27f5728f1f7f727074011da7a9242467ad89e7373ae",
+  "policy_version": "purchase-policy-v4",
+  "runtime_config_digest": "sha256:599586cf157a82869da9367c474ba6ac247ac5555b69302ae06b129b4a461c0a",
+  "tool_schema_version": "travel-tools-v7",
+  "evaluation_dataset": "travel-critical-v9",
+  "evaluation_dataset_digest": "sha256:deebd4adb4ca0616fc60a1e413f5b22617e6e66a3c812168348760f951b7fc4e",
+  "evaluation_attestation": {
+    "issuer": "chapter-evaluator",
+    "subject": "sha256:91a1165d9d24bad3148aba49c781c9ba0e023c5d3e792a960cfd303c247cf4aa:sha256:deebd4adb4ca0616fc60a1e413f5b22617e6e66a3c812168348760f951b7fc4e",
+    "signature": "hmac-sha256:6b15673c862324496cea15ce9ddd3e72c61f46c5bb487c58c6c59faba9ab52dd"
+  },
+  "environment": "local"
+}

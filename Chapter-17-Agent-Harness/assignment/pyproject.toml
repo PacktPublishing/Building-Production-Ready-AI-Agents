@@ -1,0 +1,13 @@
+[project]
+name = "chapter17-agent-harness-assignment"
+version = "0.1.0"
+description = "Standalone Ollama agent harness with scenario evaluation"
+requires-python = ">=3.11"
+dependencies = [
+  "httpx>=0.27.0",
+  "ollama>=0.6.0",
+  "pytest>=8.0.0",
+]
+
+[tool.uv]
+package = false

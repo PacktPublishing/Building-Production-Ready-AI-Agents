@@ -1,0 +1,44 @@
+{
+  "action": "rollback_and_investigate",
+  "reasons": [
+    "p95_latency"
+  ],
+  "candidate_versions": {
+    "agent": "travel-agent-2026.08.2",
+    "prompt": "v14",
+    "model": "springfield-model-v4",
+    "policy": "springfield-policy-v3",
+    "tools": "springfield-tools-v6"
+  },
+  "cohort": {
+    "name": "springfield-canary",
+    "window_minutes": 60
+  },
+  "metrics": {
+    "window_minutes": 60,
+    "eligible_runs": 100,
+    "completion_rate": 0.93,
+    "policy_denial_rate": 0.02,
+    "p95_latency_seconds": 9.0,
+    "cost_per_success": 0.09
+  },
+  "limits": {
+    "minimum_window_minutes": 60,
+    "minimum_eligible_runs": 100,
+    "completion_slo": 0.92,
+    "maximum_completion_budget_consumption": 1.0,
+    "maximum_relative_completion_drop": 0.05,
+    "maximum_policy_denial_rate": 0.05,
+    "maximum_p95_latency_seconds": 8.0,
+    "maximum_cost_per_success": 0.12
+  },
+  "representative_trace_ids": [
+    "trace-sf-041",
+    "trace-sf-087"
+  ],
+  "next_checks": [
+    "Compare slow model and tool spans with v12",
+    "Reproduce the highest-latency sanitized trace",
+    "Add the confirmed failure to regression evaluation"
+  ]
+}

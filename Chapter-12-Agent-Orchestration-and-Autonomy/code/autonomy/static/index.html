@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Program Autonomy Simulator</title>
+    <style>
+      :root {
+        --bg-deep: #0b1f2a;
+        --bg-mid: #123649;
+        --card: #f4f7f8;
+        --ink: #0e2430;
+        --ink-soft: #36505e;
+        --accent: #e66100;
+        --accent-2: #0d9488;
+        --warn: #c2410c;
+        --ok: #166534;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 20% 10%, #1e5875 0%, transparent 32%),
+          radial-gradient(circle at 85% 15%, #0d948866 0%, transparent 36%),
+          linear-gradient(130deg, var(--bg-deep), var(--bg-mid));
+      }
+
+      .wrap {
+        width: min(1100px, 95vw);
+        margin: 24px auto;
+        display: grid;
+        gap: 16px;
+      }
+
+      .panel {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 16px;
+        box-shadow: 0 10px 35px #0410165f;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        letter-spacing: 0.02em;
+      }
+
+      p {
+        margin: 0.5rem 0 0;
+        color: var(--ink-soft);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 12px;
+      }
+
+      label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #bed0d9;
+        border-radius: 10px;
+        font-size: 0.95rem;
+      }
+
+      .col-4 { grid-column: span 4; }
+      .col-6 { grid-column: span 6; }
+      .col-8 { grid-column: span 8; }
+      .col-12 { grid-column: span 12; }
+
+      .checks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .check {
+        background: #e8f0f3;
+        border-radius: 999px;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      button {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .primary { background: var(--accent); color: white; }
+      .secondary { background: #dde8ed; color: var(--ink); }
+      .approve { background: var(--ok); color: white; }
+      .reject { background: var(--warn); color: white; }
+
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .kpi {
+        background: #eaf3f7;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .kpi .k {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        color: #4a6472;
+      }
+
+      .kpi .v {
+        font-size: 1.1rem;
+        font-weight: 800;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        background: #d9eaf0;
+      }
+
+      .status.awaiting_manual {
+        background: #fde4cf;
+        color: #8b3a00;
+      }
+
+      .status.completed {
+        background: #d9f6df;
+        color: #0f5132;
+      }
+
+      #events {
+        max-height: 340px;
+        overflow: auto;
+        border: 1px solid #d5e3ea;
+        border-radius: 10px;
+        padding: 10px;
+        background: #f8fbfc;
+        font-family: "IBM Plex Mono", Consolas, monospace;
+        font-size: 0.83rem;
+      }
+
+      .event {
+        border-bottom: 1px dashed #d7e2e8;
+        padding: 6px 0;
+      }
+
+      .event:last-child {
+        border-bottom: 0;
+      }
+
+      .event .step {
+        color: #0f4d6d;
+        font-weight: 700;
+      }
+
+      @media (max-width: 850px) {
+        .col-4, .col-6, .col-8 { grid-column: span 12; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="panel">
+        <h1>Program Autonomy Simulator</h1>
+        <p>
+          Set a profit goal, stream random stock quotes, and decide where autonomy stops for manual review.
+        </p>
+      </section>
+
+      <section class="panel grid" id="config-panel">
+        <div class="col-4">
+          <label for="target-profit">Profit Goal ($)</label>
+          <input id="target-profit" type="number" value="300" min="1" step="1" />
+        </div>
+        <div class="col-4">
+          <label for="starting-cash">Starting Cash ($)</label>
+          <input id="starting-cash" type="number" value="5000" min="100" step="100" />
+        </div>
+        <div class="col-4">
+          <label for="max-cycles">Max Cycles</label>
+          <input id="max-cycles" type="number" value="12" min="1" max="100" step="1" />
+        </div>
+
+        <div class="col-12">
+          <label>Manual vs Autonomous Checkpoints</label>
+          <div class="checks">
+            <label class="check"><input id="manual-quote" type="checkbox" checked /> Quote check</label>
+            <label class="check"><input id="manual-risk" type="checkbox" checked /> Risk check</label>
+            <label class="check"><input id="manual-trade" type="checkbox" checked /> Trade approval</label>
+          </div>
+        </div>
+
+        <div class="col-12 actions">
+          <button id="start-btn" class="primary">Start Session</button>
+          <button id="advance-btn" class="secondary">Run Until Next Checkpoint</button>
+          <button id="approve-btn" class="approve">Approve Pending Check</button>
+          <button id="reject-btn" class="reject">Reject Pending Check</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="kpis">
+          <div class="kpi"><div class="k">Status</div><div class="v"><span id="status" class="status">idle</span></div></div>
+          <div class="kpi"><div class="k">Cycle</div><div class="v" id="cycle">-</div></div>
+          <div class="kpi"><div class="k">Current Price</div><div class="v" id="price">-</div></div>
+          <div class="kpi"><div class="k">Proposed Action</div><div class="v" id="action">-</div></div>
+          <div class="kpi"><div class="k">Profit</div><div class="v" id="profit">-</div></div>
+          <div class="kpi"><div class="k">Net Worth</div><div class="v" id="net-worth">-</div></div>
+          <div class="kpi"><div class="k">Pending Step</div><div class="v" id="pending">-</div></div>
+          <div class="kpi"><div class="k">Risk</div><div class="v" id="risk">-</div></div>
+        </div>
+        <p id="reason" style="margin-top: 10px;"></p>
+      </section>
+
+      <section class="panel">
+        <h2 style="margin-top: 0;">Decision Log</h2>
+        <div id="events"></div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

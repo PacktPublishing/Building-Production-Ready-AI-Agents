@@ -1,0 +1,21 @@
+[project]
+name = "rag-assignment"
+version = "0.1.0"
+description = "RAG assignment with FastAPI"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain-core>=0.1.0",
+    "langchain-ollama>=0.1.0",
+    "langchain-text-splitters>=0.0.1",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "numpy>=1.24.0",
+    "ollama>=0.1.0",
+]
+
+[tool.setuptools]
+py-modules = ["api", "rag"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

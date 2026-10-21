@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 12 Assignment</title>
+  <style>
+    :root {
+      --bg: #f5efe4;
+      --panel: #fffaf1;
+      --ink: #1e1b18;
+      --accent: #0b6e4f;
+      --accent-soft: #dbeee7;
+      --warn: #b45309;
+      --danger: #9a3412;
+      --line: #d9ccb8;
+      --shadow: 0 18px 40px rgba(40, 24, 12, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(11, 110, 79, 0.16), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(180, 83, 9, 0.12), transparent 40%),
+        var(--bg);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .shell {
+      display: grid;
+      grid-template-columns: 1.25fr 0.9fr;
+      gap: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 20px 40px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    h1, h2 {
+      margin: 0 0 12px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    p {
+      line-height: 1.55;
+      margin: 0 0 12px;
+    }
+
+    .toolbar, .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 700;
+      font-family: inherit;
+      transition: transform 120ms ease, opacity 120ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary { background: var(--accent); color: white; }
+    .secondary { background: var(--accent-soft); color: var(--accent); }
+    .warning { background: #fde7c6; color: var(--warn); }
+    .danger { background: #f8d7cf; color: var(--danger); }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      resize: vertical;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .trace {
+      max-height: 60vh;
+      overflow: auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .trace-item {
+      border-left: 4px solid var(--accent);
+      padding-left: 12px;
+    }
+
+    .meta {
+      color: #5f584f;
+      font-size: 0.92rem;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: Consolas, monospace;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="card">
+      <h1>Travel Workflow Assignment</h1>
+      <p>This Chapter 12 assignment demonstrates workflow orchestration, policy-controlled approval, and checkpoint resume in one place. Use it to see when a run can continue automatically, when it pauses, and what state gets saved for recovery.</p>
+      <p>The fastest way to use it is to create a session, send a travel request, then walk the run through approval and resume when the quoted total crosses policy.</p>
+
+      <div class="toolbar">
+        <button id="newSession" class="primary">New Session</button>
+        <span id="sessionMeta" class="pill">No session yet</span>
+        <span id="statusMeta" class="pill">Status: idle</span>
+      </div>
+
+      <div style="margin-top: 18px;">
+        <textarea id="messageInput">Book a trip to Tokyo next month with budget 1800 for 2 travelers</textarea>
+      </div>
+
+      <div class="actions">
+        <button id="sendMessage" class="primary">Send Message</button>
+        <button id="approve" class="secondary">Approve</button>
+        <button id="deny" class="danger">Deny</button>
+        <button id="resume" class="warning">Resume Checkpoint</button>
+      </div>
+
+      <div style="margin-top: 22px;">
+        <h2>Latest Response</h2>
+        <pre id="responseBox">Create a session to begin.</pre>
+      </div>
+
+      <div style="margin-top: 22px;">
+        <h2>Current State</h2>
+        <pre id="stateBox">{}</pre>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>Trace</h2>
+      <p>The trace should make the decision path explainable. Watch for quote estimation, checkpoint saves, approval gates, restore events, and final booking execution.</p>
+      <div id="traceBox" class="trace"></div>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

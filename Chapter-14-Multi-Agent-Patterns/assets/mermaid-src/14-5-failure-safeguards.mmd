@@ -1,0 +1,15 @@
+flowchart TB
+    A[Supervisor-Worker fails] --> A1[Supervisor crash or worker timeout]
+    A1 --> A2[Checkpoint state and add backup worker routing]
+
+    B[Debate fails] --> B1[Biased judge or low-value argument loop]
+    B1 --> B2[Add secondary judge and fallback decision path]
+
+    C[Swarm fails] --> C1[High cost with low diversity]
+    C1 --> C2[Force planner diversity and tighten merge rubric]
+
+    D[Committee fails] --> D1[Tie paralysis or dominant member]
+    D1 --> D2[Predefine tie-break rule and speaking constraints]
+
+    E[Peer-to-Peer fails] --> E1[Negotiation never converges]
+    E1 --> E2[Round limit then escalate to arbiter]

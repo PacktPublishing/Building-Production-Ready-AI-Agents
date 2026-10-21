@@ -1,0 +1,16 @@
+[project]
+name = "chapter-06-rag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "chromadb>=1.5.5",
+    "langchain-core>=1.2.19",
+    "langchain-ollama>=1.0.1",
+    "langchain-text-splitters>=1.1.1",
+    "numpy>=2.4.3",
+    "ollama>=0.6.1",
+    "sentence-transformers>=5.3.0",
+    "sqlite-vec>=0.1.6",
+]

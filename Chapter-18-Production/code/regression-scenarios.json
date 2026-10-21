@@ -1,0 +1,15 @@
+[
+  {
+    "name": "ambiguous destination completes after clarification",
+    "task": "Find a flight to Springfield; ask which state before searching",
+    "expected_trajectory": [
+      "run_started",
+      "run_completed"
+    ],
+    "forbidden_events": [
+      "tool_requested:search_flights"
+    ],
+    "expected_termination": "completed",
+    "source": "redacted-production-pattern"
+  }
+]

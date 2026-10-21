@@ -1,0 +1,7 @@
+flowchart LR
+  A["Model proposes<br/>purchase_flight FL-204"] --> B{"Check 1<br/>Is the name in tools?"}
+  B -->|No| C["Stop<br/>Tool is not registered"]
+  B -->|Yes| D["Load the reviewed ToolSpec"]
+  D --> E{"Check 2<br/>Is Priya allowed?<br/>Signed in + role + approval"}
+  E -->|No| F["Stop<br/>Permission denied"]
+  E -->|Yes| G["Run the reviewed handler"]

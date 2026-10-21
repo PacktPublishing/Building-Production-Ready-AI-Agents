@@ -1,0 +1,32 @@
+[
+    {
+        "id": "T-001",
+        "sender": "alice@company.com",
+        "message": "My laptop won't turn on after the latest Windows update. I've tried holding the power button for 30 seconds but nothing happens. I have a client presentation in 2 hours!"
+    },
+    {
+        "id": "T-002",
+        "sender": "bob@company.com",
+        "message": "I can't access the shared drive. It keeps saying 'access denied'. I was able to access it yesterday. My colleague sitting next to me can still access it fine."
+    },
+    {
+        "id": "T-003",
+        "sender": "carol@company.com",
+        "message": "I received a suspicious email from what looks like our CEO asking me to wire $50,000 to a new vendor. The email address looks slightly different from the real one. Should I report this?"
+    },
+    {
+        "id": "T-004",
+        "sender": "dave@company.com",
+        "message": "The internet keeps dropping every 10 minutes across the entire 3rd floor. Multiple people are affected and we can't join video calls. This started after maintenance last night."
+    },
+    {
+        "id": "T-005",
+        "sender": "eve@company.com",
+        "message": "Outlook stopped syncing this morning. I haven't received any emails since 8 AM. I've tried restarting Outlook and clearing the cache but it didn't help. I'm expecting an important contract today."
+    },
+    {
+        "id": "T-006",
+        "sender": "frank@company.com",
+        "message": "My computer has become extremely slow since IT installed the new antivirus software yesterday. Applications take 2-3 minutes to open and it freezes constantly. I can barely work."
+    }
+]

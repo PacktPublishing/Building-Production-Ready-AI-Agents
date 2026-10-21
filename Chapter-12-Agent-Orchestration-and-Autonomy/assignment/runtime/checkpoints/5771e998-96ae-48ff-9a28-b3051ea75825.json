@@ -1,0 +1,70 @@
+{
+  "session_id": "5771e998-96ae-48ff-9a28-b3051ea75825",
+  "request": {
+    "destination": "Oslo",
+    "budget": 700,
+    "month": "next month",
+    "travelers": 1
+  },
+  "policy": {
+    "approval_limit": 1200,
+    "blocked_limit": 2200
+  },
+  "quotes": {
+    "flight": 474,
+    "hotel": 260,
+    "insurance": 55,
+    "total": 789
+  },
+  "status": "collecting_intent",
+  "current_checkpoint": "post_quote_review",
+  "checkpoint_ready": false,
+  "booking_reference": null,
+  "last_message": "Start by telling me where you want to go, your budget, the month, and how many travelers to plan for.",
+  "trace": [
+    {
+      "ts": "2026-06-13T21:11:59.555675+00:00",
+      "step": "system",
+      "message": "Session created.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-13T21:11:59.570906+00:00",
+      "step": "user",
+      "message": "Received user message.",
+      "data": {
+        "message": "Book a trip to Oslo next month with budget 700 for 1 traveler"
+      }
+    },
+    {
+      "ts": "2026-06-13T21:11:59.570906+00:00",
+      "step": "planner",
+      "message": "Applied extracted updates.",
+      "data": {
+        "updated_fields": [
+          "destination",
+          "budget",
+          "travelers",
+          "month"
+        ]
+      }
+    },
+    {
+      "ts": "2026-06-13T21:11:59.570906+00:00",
+      "step": "planner",
+      "message": "Gathering flight, hotel, and insurance quotes in parallel.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-13T21:11:59.575221+00:00",
+      "step": "planner",
+      "message": "Estimated travel quotes.",
+      "data": {
+        "flight": 474,
+        "hotel": 260,
+        "insurance": 55,
+        "total": 789
+      }
+    }
+  ]
+}

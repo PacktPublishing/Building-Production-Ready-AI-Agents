@@ -1,0 +1,27 @@
+flowchart LR
+    U[User request] --> M[Model]
+    M -->|Proposes purchase_flight| H[Agent harness]
+
+    H --> A{Exact approval granted?}
+    A -->|No| D[Deny action]
+    A -->|Yes| I[Check idempotency key]
+    I --> C{Cached result?}
+    C -->|No| T[Invoke purchase tool]
+    C -->|Yes| X[Reuse in-process result]
+
+    D --> E[Record policy_denied]
+    E --> S[Stop run]
+    T --> O[Record tool_completed]
+    X --> P[Record tool_replayed]
+    O --> R[Return tool observation to model]
+    P --> R
+
+    classDef model fill:#dceeff,stroke:#2f6f9f,color:#172b3a
+    classDef harness fill:#fff2cc,stroke:#9a7412,color:#3c2f0b
+    classDef action fill:#e2f0d9,stroke:#548235,color:#203814
+    classDef denied fill:#f4cccc,stroke:#a61c00,color:#4c0c00
+
+    class M model
+    class H,I,A,C,E,O,P harness
+    class T,X,R action
+    class D,S denied

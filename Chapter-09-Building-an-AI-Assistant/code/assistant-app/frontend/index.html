@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Support Triage System</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>🎫 IT Support Triage</h1>
+            <div class="status-bar">
+                <span id="connection-status" class="status-indicator">⏳ Checking...</span>
+                <span id="model-name" class="model-badge"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="pipeline">
+        <!-- Column 1: Inbox -->
+        <section class="column column-inbox">
+            <div class="column-header">
+                <h2>📥 Inbox</h2>
+                <span class="column-count" id="inbox-count">0</span>
+            </div>
+            <div class="column-body" id="inbox-list"></div>
+            <div class="column-footer">
+                <button class="btn btn-secondary btn-sm" onclick="addCustomTicket()">+ New Ticket</button>
+                <button class="btn btn-secondary btn-sm" onclick="loadAllSamples()">Load Samples</button>
+            </div>
+        </section>
+
+        <!-- Column 2: Being Analyzed -->
+        <section class="column column-analyzing">
+            <div class="column-header">
+                <h2>🔄 Being Analyzed</h2>
+                <span class="column-count" id="analyzing-count">0</span>
+            </div>
+            <div class="column-body" id="analyzing-list"></div>
+            <div class="column-footer">
+                <span class="timer-display" id="timer-display"></span>
+            </div>
+        </section>
+
+        <!-- Column 3: Triaged -->
+        <section class="column column-triaged">
+            <div class="column-header">
+                <h2>✅ Triaged</h2>
+                <span class="column-count" id="triaged-count">0</span>
+            </div>
+            <div class="column-body" id="triaged-list"></div>
+        </section>
+    </main>
+
+    <!-- Modal for adding custom ticket -->
+    <div class="modal-overlay hidden" id="modal-overlay" onclick="closeModal(event)">
+        <div class="modal">
+            <h3>New Ticket</h3>
+            <input type="text" id="modal-sender" placeholder="Sender (e.g. alice@company.com)">
+            <textarea id="modal-message" placeholder="Describe the IT support issue..." rows="4"></textarea>
+            <div class="modal-actions">
+                <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary btn-sm" onclick="submitCustomTicket()">Add to Inbox</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

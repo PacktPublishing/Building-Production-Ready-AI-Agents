@@ -1,0 +1,79 @@
+{
+  "session_id": "45ae9787-7b11-4767-8519-2166c3f6c3ca",
+  "request": {
+    "destination": "Paris",
+    "budget": 1800,
+    "month": "july",
+    "travelers": 2
+  },
+  "policy": {
+    "approval_limit": 1200,
+    "blocked_limit": 2200
+  },
+  "quotes": {
+    "flight": 865,
+    "hotel": 598,
+    "insurance": 110,
+    "total": 1573
+  },
+  "status": "awaiting_approval",
+  "current_checkpoint": "awaiting_approval",
+  "checkpoint_ready": true,
+  "booking_reference": null,
+  "last_message": "Start by telling me where you want to go, your budget, the month, and how many travelers to plan for.",
+  "trace": [
+    {
+      "ts": "2026-06-19T13:03:08.540561+00:00",
+      "step": "system",
+      "message": "Session created.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T13:03:09.386496+00:00",
+      "step": "user",
+      "message": "Received user message.",
+      "data": {
+        "message": "Book a trip to Paris in July with budget 1800 for 2 travelers"
+      }
+    },
+    {
+      "ts": "2026-06-19T13:03:09.388012+00:00",
+      "step": "planner",
+      "message": "Applied extracted updates.",
+      "data": {
+        "updated_fields": [
+          "destination",
+          "budget",
+          "travelers",
+          "month"
+        ]
+      }
+    },
+    {
+      "ts": "2026-06-19T13:03:09.388012+00:00",
+      "step": "planner",
+      "message": "Gathering flight, hotel, and insurance quotes in parallel.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T13:03:09.391028+00:00",
+      "step": "planner",
+      "message": "Estimated travel quotes.",
+      "data": {
+        "flight": 865,
+        "hotel": 598,
+        "insurance": 110,
+        "total": 1573
+      }
+    },
+    {
+      "ts": "2026-06-19T13:03:09.393546+00:00",
+      "step": "checkpoint",
+      "message": "Saved checkpoint 'post_quote_review'.",
+      "data": {
+        "path": "C:\\Users\\chnoring\\Documents\\books\\agentic-book\\Chapter-13-Multi-Agent-Collaboration-and-Communication\\assignment\\runtime\\checkpoints\\45ae9787-7b11-4767-8519-2166c3f6c3ca.json",
+        "checkpoint": "post_quote_review"
+      }
+    }
+  ]
+}

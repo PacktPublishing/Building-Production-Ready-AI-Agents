@@ -1,0 +1,17 @@
+[project]
+name = "chapter12-program-autonomy"
+version = "0.1.0"
+description = "Program autonomy simulator web app"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.116.1",
+    "uvicorn>=0.35.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["app"]

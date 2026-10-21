@@ -1,0 +1,18 @@
+[project]
+name = "chapter-09-assignment"
+version = "0.1.0"
+description = "Minimal AI assistant app for Chapter 9 using Ollama"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "ollama>=0.6.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    "uvicorn>=0.32.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "httpx>=0.28.0",
+]

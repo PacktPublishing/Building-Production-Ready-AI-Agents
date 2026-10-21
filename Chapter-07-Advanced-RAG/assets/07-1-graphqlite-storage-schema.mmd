@@ -1,0 +1,14 @@
+flowchart LR
+    N["nodes<br/>id"]
+    L["node_labels<br/>node_id, label"]
+    NP["node_props_*<br/>node_id, key_id, value"]
+    E["edges<br/>source_id, target_id, type"]
+    EP["edge_props_*<br/>edge_id, key_id, value"]
+    K["property_keys<br/>id, key"]
+
+    N -->|has label| L
+    N -->|source and target| E
+    N -->|has properties| NP
+    E -->|has properties| EP
+    K -->|names property| NP
+    K -->|names property| EP

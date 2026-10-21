@@ -1,0 +1,16 @@
+flowchart TD
+  A[Travel request arrives] --> B{Task shape?}
+  B -->|Single deterministic transform| C[Deterministic code path]
+  B -->|Multi-step with clear subtasks| D[Planner + workers]
+  B -->|Specialized domains and constraints| E[Multi-agent protocol]
+  B -->|High compliance and safety| F[Orchestrator + strict guardrails]
+
+  C --> G[Lowest overhead]
+  D --> H[Parallel work with control]
+  E --> I[Strong separation of concerns]
+  F --> J[Centralized policy enforcement]
+
+  G --> K[Document architecture decision]
+  H --> K
+  I --> K
+  J --> K

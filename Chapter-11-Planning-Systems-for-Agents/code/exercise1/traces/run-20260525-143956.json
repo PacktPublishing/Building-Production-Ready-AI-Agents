@@ -1,0 +1,150 @@
+[
+  {
+    "timestamp": "2026-05-25T14:39:17Z",
+    "actor": "system",
+    "event": "run_started",
+    "details": {
+      "host": "http://localhost:11434",
+      "model": "qwen2.5:1.5b"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:33Z",
+    "actor": "user",
+    "event": "trip_request",
+    "details": {
+      "destination": "london",
+      "start_date": "2026-01-01",
+      "trip_type": "weekend"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:33Z",
+    "actor": "planner",
+    "event": "generate_plan_start",
+    "details": {
+      "destination": "london",
+      "start_date": "2026-01-01",
+      "trip_type": "weekend",
+      "use_alternative_service": false
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "planner",
+    "event": "generate_plan_complete",
+    "details": {
+      "service": "primary",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "monitor",
+    "event": "oversee_execution_start",
+    "details": {
+      "service": "primary"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "execution_started",
+    "details": {
+      "service": "primary",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 1,
+      "tool": "book_flight",
+      "description": "Book a flight from your departure airport (London Heathrow or London City) to the UK on January 1, 2026.",
+      "success": false,
+      "message": "Failed to connect to flight booking service."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "execution_stopped_on_failure",
+    "details": {
+      "failed_step": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "monitor",
+    "event": "failure_detected",
+    "details": {
+      "step": "Book a flight from your departure airport (London Heathrow or London City) to the UK on January 1, 2026.",
+      "category": "transient_service_outage"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "monitor",
+    "event": "retry_attempt",
+    "details": {
+      "attempt": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "retry_started",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 1,
+      "tool": "book_flight",
+      "description": "Book a flight from your departure airport (London Heathrow or London City) to the UK on January 1, 2026.",
+      "success": false,
+      "message": "Failed to connect to flight booking service."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:41Z",
+    "actor": "executor",
+    "event": "execution_stopped_on_failure",
+    "details": {
+      "failed_step": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:56Z",
+    "actor": "monitor",
+    "event": "approval_declined",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-05-25T14:39:56Z",
+    "actor": "monitor",
+    "event": "run_summary",
+    "details": {
+      "status": "cancelled",
+      "resolution": "user declined provider switch",
+      "steps_attempted": 2,
+      "steps_succeeded": 0,
+      "steps_failed": 2,
+      "retry_count": 1,
+      "replan_count": 0,
+      "approval_prompts": 1,
+      "approval_granted": 0,
+      "success_rate": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-05-25T14:39:56Z",
+    "actor": "system",
+    "event": "run_finished",
+    "details": {}
+  }
+]

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 11 Assignment - Pizza Ordering Agent</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    :root {
+      --bg-top: #fff6dd;
+      --bg-bottom: #def8ef;
+      --card: #fffefb;
+      --ink: #23302d;
+      --accent: #ef6b57;
+      --accent-2: #26a69a;
+      --line: #c9dfd8;
+      --texture: rgba(35, 48, 45, 0.04);
+    }
+    body {
+      margin: 0;
+      font-family: "Candara", "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(145deg, var(--bg-top), var(--bg-bottom));
+      overflow-x: hidden;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.45;
+      background-image:
+        repeating-linear-gradient(45deg, transparent 0, transparent 9px, var(--texture) 10px),
+        repeating-linear-gradient(-45deg, transparent 0, transparent 13px, rgba(38, 166, 154, 0.03) 14px);
+    }
+    .layout {
+      max-width: 1100px;
+      margin: 24px auto;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(300px, 1fr);
+      gap: 16px;
+      padding: 0 16px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 12px 28px rgba(25, 88, 76, 0.12);
+    }
+    .chat {
+      display: flex;
+      flex-direction: column;
+      min-height: 75vh;
+      min-width: 0;
+    }
+    .header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      background: linear-gradient(90deg, rgba(38, 166, 154, 0.12), rgba(255, 211, 110, 0.2));
+    }
+    .messages {
+      padding: 16px;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bubble {
+      max-width: 80%;
+      min-width: 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .user {
+      align-self: flex-end;
+      background: linear-gradient(180deg, #ffd9cf, #ffc4b4);
+      border: 1px solid #f3ab96;
+    }
+    .agent {
+      align-self: flex-start;
+      background: linear-gradient(180deg, #ebfff9, #d5f6ee);
+      border: 1px solid #b8e9dc;
+    }
+    .agent.pending {
+      background: #fff7ed;
+      border: 1px dashed var(--line);
+      color: #72563c;
+    }
+    .pending-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .spinner {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 16px 0 0 rgba(191, 78, 48, 0.55), 32px 0 0 rgba(191, 78, 48, 0.25);
+      animation: pulseDots 1s infinite ease-in-out;
+    }
+    @keyframes pulseDots {
+      0% { transform: translateX(0); opacity: 0.9; }
+      50% { transform: translateX(4px); opacity: 0.55; }
+      100% { transform: translateX(0); opacity: 0.9; }
+    }
+    .composer {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.8));
+    }
+    select {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 14px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 15px;
+    }
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      box-shadow: 0 6px 14px rgba(239, 107, 87, 0.3);
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(239, 107, 87, 0.35);
+    }
+    button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+    }
+    .panel { padding: 14px; }
+    .panel {
+      min-width: 0;
+    }
+    .panel h3 { margin-top: 0; }
+    pre {
+      background: #fff7ed;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      overflow: auto;
+      max-height: 300px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .chat { min-height: 62vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <section class="card chat">
+      <div id="chat-title" class="header">Pizza Ordering Agent (Planner / Executor / Monitor)</div>
+      <div id="messages" class="messages"></div>
+      <form id="composer" class="composer">
+        <select id="flow" aria-label="Select workflow">
+          <option value="pizza" selected>Pizza Flow</option>
+          <option value="bagel">Bagel Flow</option>
+        </select>
+        <input id="message" autocomplete="off" placeholder="Type your order request, e.g. medium thin crust with olives" />
+        <button type="submit">Send</button>
+      </form>
+    </section>
+
+    <aside class="card panel">
+      <h3>Session State</h3>
+      <pre id="state">{}</pre>
+      <h3>Latest Trace (last 5 turns)</h3>
+      <pre id="trace">[]</pre>
+      <p><strong>Tip:</strong> Try phrases like <em>confirm</em>, <em>accept eta</em>, or add an allergy such as <em>gluten</em>.</p>
+    </aside>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+description: Standalone travel agent trajectory evaluation
+
+prompts:
+  - "{{request}}"
+
+providers:
+  - id: file://app.py
+    label: Standalone travel agent
+    config:
+      model: qwen3-vl:2b
+      pythonExecutable: .venv/Scripts/python.exe
+      timeout: 900000
+
+tracing:
+  enabled: true
+  failOnReceiverStartFailure: true
+  otlp:
+    http:
+      enabled: true
+      port: 4318
+
+tests:
+  - description: Agent retrieves Seattle trips and hotels
+    vars:
+      request: Plan a trip to Seattle. Recommend one trip and one hotel.
+    assert:
+      - type: trajectory:tool-used
+        value: get_trips
+        metric: TripToolRouting
+      - type: trajectory:tool-args-match
+        value:
+          name: get_trips
+          mode: exact
+          args:
+            destination: Seattle
+        metric: TripToolArguments
+      - type: trajectory:tool-used
+        value: get_hotels
+        metric: HotelToolRouting
+      - type: trajectory:tool-args-match
+        value:
+          name: get_hotels
+          mode: exact
+          args:
+            destination: Seattle
+        metric: HotelToolArguments
+      - type: trace-error-spans
+        value:
+          max_count: 0
+        metric: WorkflowHealth
+      - type: icontains-all
+        value:
+          - Seattle
+          - trip
+          - hotel
+        metric: FinalAnswer
+  - description: Weather request does not call travel tools
+    vars:
+      request: What is the weather in Seattle?
+    assert:
+      - type: not-trajectory:tool-used
+        value: get_trips
+        metric: NoTripTool
+      - type: not-trajectory:tool-used
+        value: get_hotels
+        metric: NoHotelTool
+      - type: trace-error-spans
+        value:
+          max_count: 0
+        metric: WorkflowHealth
+      - type: icontains
+        value: travel
+        metric: OutOfDomainResponse

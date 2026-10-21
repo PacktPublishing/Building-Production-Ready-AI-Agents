@@ -1,0 +1,14 @@
+[project]
+name = "chapter16-travel-agent-assignment"
+version = "0.1.0"
+description = "Standalone travel agent evaluated with Promptfoo"
+requires-python = ">=3.11"
+dependencies = [
+  "ollama>=0.3.0",
+  "opentelemetry-api>=1.36.0",
+  "opentelemetry-exporter-otlp-proto-http>=1.36.0",
+  "opentelemetry-sdk>=1.36.0",
+]
+
+[tool.uv]
+package = false

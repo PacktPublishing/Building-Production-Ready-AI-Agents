@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GraphRAG Movie Chat</title>
+  <style>
+    :root {
+      --bg: #f4efe6;
+      --panel: rgba(255, 252, 247, 0.82);
+      --panel-strong: #fffaf2;
+      --ink: #1d2a2a;
+      --muted: #617070;
+      --accent: #b65a3c;
+      --accent-deep: #8a4028;
+      --accent-soft: #efc2a1;
+      --line: rgba(29, 42, 42, 0.12);
+      --shadow: 0 18px 50px rgba(60, 39, 20, 0.12);
+      --user: #1d2a2a;
+      --assistant: #fff7ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(239, 194, 161, 0.75), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(182, 90, 60, 0.18), transparent 24%),
+        linear-gradient(135deg, #f6f1e8 0%, #efe4d5 45%, #f8f4ec 100%);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(1100px, 100%);
+      min-height: min(780px, calc(100vh - 48px));
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      background: rgba(255, 251, 245, 0.62);
+    }
+
+    .sidebar {
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255, 248, 238, 0.95), rgba(246, 235, 221, 0.92));
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+      color: var(--accent);
+      margin: 0 0 10px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      line-height: 0.95;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    .lede,
+    .status,
+    .hint,
+    .meta {
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .lede {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.55);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      min-height: 42px;
+    }
+
+    .composer button {
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font: inherit;
+      transition: transform 160ms ease, background 160ms ease, opacity 160ms ease;
+    }
+
+    .composer button:hover {
+      transform: translateY(-1px);
+    }
+
+    .composer button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .example {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      font-family: "Segoe UI", sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .chat {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      background: linear-gradient(180deg, rgba(255, 252, 247, 0.9), rgba(255, 247, 238, 0.85));
+    }
+
+    .chat-header {
+      padding: 24px 28px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+    }
+
+    .chat-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .messages {
+      padding: 26px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: min(76ch, 84%);
+      padding: 16px 18px;
+      border-radius: 22px;
+      animation: rise 220ms ease;
+      box-shadow: 0 12px 24px rgba(63, 44, 27, 0.06);
+    }
+
+    .message.user {
+      align-self: end;
+      background: var(--user);
+      color: #fff9f3;
+      border-bottom-right-radius: 8px;
+    }
+
+    .message.assistant {
+      align-self: start;
+      background: var(--assistant);
+      border: 1px solid rgba(182, 90, 60, 0.14);
+      border-bottom-left-radius: 8px;
+    }
+
+    .message .role {
+      display: block;
+      font-family: "Segoe UI", sans-serif;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 8px;
+      opacity: 0.72;
+    }
+
+    .message .text {
+      font-family: "Segoe UI", sans-serif;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .composer {
+      border-top: 1px solid var(--line);
+      padding: 22px 24px 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      background: rgba(255, 250, 242, 0.94);
+    }
+
+    .composer textarea {
+      resize: none;
+      min-height: 68px;
+      max-height: 180px;
+      border-radius: 22px;
+      border: 1px solid rgba(29, 42, 42, 0.12);
+      padding: 18px 20px;
+      font: inherit;
+      font-family: "Segoe UI", sans-serif;
+      background: #fffdf9;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .composer textarea:focus {
+      border-color: rgba(182, 90, 60, 0.5);
+      box-shadow: 0 0 0 4px rgba(182, 90, 60, 0.08);
+    }
+
+    .composer button {
+      align-self: end;
+      padding: 0 22px;
+      min-height: 68px;
+      background: var(--accent-deep);
+      color: #fff8f3;
+      font-weight: 600;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: -8px;
+      padding: 0 26px 16px;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 920px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+
+      .shell {
+        min-height: calc(100vh - 24px);
+        border-radius: 22px;
+      }
+
+      .chat-header,
+      .messages,
+      .composer,
+      .sidebar {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .composer {
+        grid-template-columns: 1fr;
+      }
+
+      .composer button {
+        width: 100%;
+      }
+
+      .message {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <aside class="sidebar">
+      <div>
+        <p class="eyebrow">Chapter 07</p>
+        <h1>GraphRAG<br>Movie Chat</h1>
+      </div>
+
+      <p class="lede">Seed the graph from the command line, then use this chat UI to ask about directors, actors, genres, and filmographies.</p>
+
+      <section class="card">
+        <p class="eyebrow">Step 1</p>
+        <div class="status">Run <strong>uv run python app.py</strong> from this folder before opening the chat.</div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Step 2</p>
+        <div class="status">Start the server with <strong>uv run uvicorn api:app --reload</strong> and open this page.</div>
+      </section>
+
+      <section class="card">
+        <p class="eyebrow">Try asking</p>
+        <div class="examples">
+          <button class="example" type="button">Who directed Inception?</button>
+          <button class="example" type="button">What genre is Titanic?</button>
+          <button class="example" type="button">What movies did Leonardo DiCaprio act in?</button>
+          <button class="example" type="button">Who acted in The Dark Knight?</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="chat">
+      <header class="chat-header">
+        <div>
+          <p class="eyebrow">Conversation</p>
+          <h2>Ask the graph</h2>
+        </div>
+        <div class="meta" id="metaText">Run app.py first, then send a question.</div>
+      </header>
+
+      <div class="messages" id="messages">
+        <article class="message assistant">
+          <span class="role">assistant</span>
+          <div class="text">After you seed the database from the command line, ask movie questions in plain English and I will translate them into graph queries.</div>
+        </article>
+      </div>
+
+      <form class="composer" id="chatForm">
+        <textarea id="promptInput" placeholder="Ask something like: Who directed Titanic?" required></textarea>
+        <button id="sendButton" type="submit">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const metaText = document.getElementById('metaText');
+    const messages = document.getElementById('messages');
+    const chatForm = document.getElementById('chatForm');
+    const promptInput = document.getElementById('promptInput');
+    const sendButton = document.getElementById('sendButton');
+    const exampleButtons = document.querySelectorAll('.example');
+
+    function addMessage(role, text) {
+      const article = document.createElement('article');
+      article.className = `message ${role}`;
+
+      const roleLabel = document.createElement('span');
+      roleLabel.className = 'role';
+      roleLabel.textContent = role;
+
+      const body = document.createElement('div');
+      body.className = 'text';
+      body.textContent = text;
+
+      article.appendChild(roleLabel);
+      article.appendChild(body);
+      messages.appendChild(article);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    async function sendPrompt(prompt) {
+      addMessage('user', prompt);
+      sendButton.disabled = true;
+      promptInput.disabled = true;
+      metaText.textContent = 'Running graph query...';
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || 'Request failed.');
+        }
+
+        const details = [
+          data.answer,
+          '',
+          `Intent: ${data.plan.intent}`,
+          `Cypher: ${data.cypher}`
+        ].join('\n');
+
+        addMessage('assistant', details);
+        metaText.textContent = 'Graph ready. Ask another question.';
+      } catch (error) {
+        addMessage('assistant', `Request failed: ${error.message}`);
+        metaText.textContent = 'If the graph is missing, run uv run python app.py first.';
+      } finally {
+        sendButton.disabled = false;
+        promptInput.disabled = false;
+        promptInput.focus();
+      }
+    }
+
+    exampleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        promptInput.value = button.textContent;
+        promptInput.focus();
+      });
+    });
+
+    chatForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const prompt = promptInput.value.trim();
+      if (!prompt) {
+        return;
+      }
+
+      promptInput.value = '';
+      await sendPrompt(prompt);
+    });
+  </script>
+</body>
+</html>

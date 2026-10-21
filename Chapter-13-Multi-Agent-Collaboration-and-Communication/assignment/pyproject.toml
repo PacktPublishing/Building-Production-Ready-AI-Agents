@@ -1,0 +1,27 @@
+[project]
+name = "ch13-multi-agent-collaboration-assignment"
+version = "0.1.0"
+description = "Chapter 13 assignment: multi-agent collaboration, coordination, and recovery"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.116.1",
+  "uvicorn>=0.35.0",
+  "httpx>=0.28.0",
+  "pydantic>=2.11.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.0"
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+exclude = ["assets*", "static*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

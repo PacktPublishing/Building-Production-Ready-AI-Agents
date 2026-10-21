@@ -1,0 +1,235 @@
+[
+  {
+    "timestamp": "2026-05-25T15:18:21Z",
+    "actor": "system",
+    "event": "run_started",
+    "details": {
+      "host": "http://localhost:11434",
+      "model": "qwen2.5:1.5b",
+      "extension": "01_add_new_step"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:36Z",
+    "actor": "planner",
+    "event": "generate_plan_start",
+    "details": {
+      "destination": "london",
+      "start_date": "2026-01-01",
+      "trip_type": "1 week",
+      "use_alternative_service": false
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "planner",
+    "event": "generate_plan_complete",
+    "details": {
+      "service": "primary",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "monitor",
+    "event": "oversee_execution_start",
+    "details": {
+      "service": "primary"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "execution_started",
+    "details": {
+      "service": "primary",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 1,
+      "tool": "book_flight",
+      "description": "Book a flight from your origin airport to London Heathrow Airport on January 01, 2026.",
+      "success": false,
+      "message": "Failed to connect to flight booking service."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "execution_stopped_on_failure",
+    "details": {
+      "failed_step": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "monitor",
+    "event": "failure_detected",
+    "details": {
+      "step": "Book a flight from your origin airport to London Heathrow Airport on January 01, 2026.",
+      "tool": "book_flight",
+      "category": "transient_service_outage",
+      "action": "retry_then_fallback"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "monitor",
+    "event": "retry_attempt",
+    "details": {
+      "attempt": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "retry_started",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 1,
+      "tool": "book_flight",
+      "description": "Book a flight from your origin airport to London Heathrow Airport on January 01, 2026.",
+      "success": false,
+      "message": "Failed to connect to flight booking service."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:50Z",
+    "actor": "executor",
+    "event": "execution_stopped_on_failure",
+    "details": {
+      "failed_step": 1
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:55Z",
+    "actor": "monitor",
+    "event": "approval_granted",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-05-25T15:18:55Z",
+    "actor": "planner",
+    "event": "replan_for_service_failure",
+    "details": {
+      "feedback": "Primary flight booking service unavailable after retry"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:18:55Z",
+    "actor": "planner",
+    "event": "generate_plan_start",
+    "details": {
+      "destination": "london",
+      "start_date": "2026-01-01",
+      "trip_type": "1 week",
+      "use_alternative_service": true
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:00Z",
+    "actor": "planner",
+    "event": "generate_plan_complete",
+    "details": {
+      "service": "alternative",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:00Z",
+    "actor": "executor",
+    "event": "execution_started",
+    "details": {
+      "service": "alternative",
+      "step_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:00Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 1,
+      "tool": "book_flight",
+      "description": "Book a flight from your departure location in the United Kingdom.",
+      "success": true,
+      "message": "Booked successfully with alternative carrier."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:00Z",
+    "actor": "executor",
+    "event": "hotel_selection_requested",
+    "details": {
+      "destination": "London",
+      "option_count": 3
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:06Z",
+    "actor": "executor",
+    "event": "hotel_selected",
+    "details": {
+      "hotel_name": "London Riverside Suites",
+      "area": "Riverside",
+      "price_per_night": "$220"
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:06Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 2,
+      "tool": "reserve_hotel",
+      "description": "Reserve hotel in London",
+      "success": true,
+      "message": "Reserved hotel in central London."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:06Z",
+    "actor": "executor",
+    "event": "step_completed",
+    "details": {
+      "index": 3,
+      "tool": "build_itinerary",
+      "description": "Build day-by-day itinerary for London",
+      "success": true,
+      "message": "Daily itinerary prepared."
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:06Z",
+    "actor": "monitor",
+    "event": "run_summary",
+    "details": {
+      "status": "success",
+      "resolution": "replan",
+      "steps_attempted": 5,
+      "steps_succeeded": 3,
+      "steps_failed": 2,
+      "retry_count": 1,
+      "replan_count": 1,
+      "approval_prompts": 2,
+      "approval_granted": 2,
+      "success_rate": 60.0
+    }
+  },
+  {
+    "timestamp": "2026-05-25T15:19:06Z",
+    "actor": "system",
+    "event": "run_finished",
+    "details": {}
+  }
+]

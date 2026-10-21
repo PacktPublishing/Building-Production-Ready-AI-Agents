@@ -1,0 +1,13 @@
+[project]
+name = "chapter17-harness-solutions"
+version = "0.1.0"
+description = "Chapter 17 agent harness exercise solutions"
+requires-python = ">=3.11"
+dependencies = [
+	"httpx>=0.27.0",
+	"ollama>=0.6.0",
+	"pytest>=8.0.0",
+]
+
+[tool.uv]
+package = false

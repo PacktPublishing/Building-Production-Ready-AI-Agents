@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter 14 Assignment</title>
+    <style>
+      :root {
+        --bg: #fbfaf6;
+        --panel: #fffdf7;
+        --ink: #1f2a2e;
+        --muted: #5b666b;
+        --accent: #c2542d;
+        --accent-soft: #f7e4dc;
+        --ok: #1f7a4d;
+        --line: #e8dfd3;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        font-family: Georgia, "Times New Roman", serif;
+        margin: 0;
+        padding: 2rem 1rem 4rem;
+        background: radial-gradient(circle at 80% -10%, #f3efe4 0%, var(--bg) 55%);
+        color: var(--ink);
+      }
+      .wrap { max-width: 960px; margin: 0 auto; }
+      h1 { margin: 0 0 0.5rem; font-size: 2rem; }
+      p { color: var(--muted); }
+
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 0.9rem;
+      }
+
+      .row label { display: block; font-weight: 700; margin-bottom: 0.35rem; }
+      input {
+        padding: 0.5rem 0.6rem;
+        width: 100%;
+        border: 1px solid #cdc3b2;
+        border-radius: 8px;
+        background: #fff;
+      }
+
+      button {
+        padding: 0.62rem 1rem;
+        margin-top: 0.8rem;
+        border: 0;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #fff;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .winner {
+        border-left: 5px solid var(--accent);
+        background: var(--accent-soft);
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+      }
+
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 0.55rem 0.4rem; border-bottom: 1px solid var(--line); }
+      th { font-size: 0.92rem; color: #374246; }
+
+      .good { color: var(--ok); font-weight: 700; }
+      .knobs { display: grid; gap: 0.8rem; }
+      .knob {
+        border: 1px dashed #d8ceb9;
+        border-radius: 10px;
+        padding: 0.7rem 0.8rem;
+        background: #fff;
+      }
+
+      details { margin-top: 1rem; }
+      summary { cursor: pointer; font-weight: 700; }
+      pre {
+        background: #f3f0e8;
+        padding: 0.9rem;
+        overflow: auto;
+        border-radius: 8px;
+        border: 1px solid #e0d7c6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Chapter 14 Assignment: Pattern Benchmark</h1>
+      <p>Compare supervisor-worker and debate, then inspect exactly why one wins and which settings to change if you want a different outcome.</p>
+
+      <section class="panel">
+        <div class="controls">
+          <div class="row">
+            <label for="destination">Destination</label>
+            <input id="destination" value="Copenhagen" />
+          </div>
+          <div class="row">
+            <label for="budget">Budget</label>
+            <input id="budget" type="number" value="2200" />
+          </div>
+          <div class="row">
+            <label for="approval">Approval Threshold</label>
+            <input id="approval" type="number" value="1800" />
+          </div>
+          <div class="row">
+            <label for="qualityWeight">Quality Weight</label>
+            <input id="qualityWeight" type="number" step="0.1" value="1.0" />
+          </div>
+          <div class="row">
+            <label for="tokenWeight">Token Penalty Weight</label>
+            <input id="tokenWeight" type="number" step="0.1" value="0.0" />
+          </div>
+          <div class="row">
+            <label for="latencyWeight">Latency Penalty Weight</label>
+            <input id="latencyWeight" type="number" step="0.1" value="0.0" />
+          </div>
+          <div class="row">
+            <label for="swDelta">Supervisor Quality Delta</label>
+            <input id="swDelta" type="number" step="0.01" value="0.00" />
+          </div>
+          <div class="row">
+            <label for="debateDelta">Debate Quality Delta</label>
+            <input id="debateDelta" type="number" step="0.01" value="0.00" />
+          </div>
+        </div>
+        <button id="run">Run Benchmark</button>
+      </section>
+
+      <section class="panel" id="result-panel" style="display:none;">
+        <h2>Winner</h2>
+        <div class="winner" id="winner-box"></div>
+        <p id="rationale"></p>
+
+        <h3>Metric Comparison</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Pattern</th>
+              <th>Quality</th>
+              <th>Token Estimate</th>
+              <th>Latency (ms)</th>
+              <th>Approved</th>
+            </tr>
+          </thead>
+          <tbody id="result-table"></tbody>
+        </table>
+
+        <h3>Why This Winner?</h3>
+        <ul id="why-list"></ul>
+
+        <h3>Knobs To Turn For A Different Outcome</h3>
+        <div class="knobs" id="knob-list"></div>
+
+        <details>
+          <summary>Show Raw JSON</summary>
+          <pre id="output">No run yet.</pre>
+        </details>
+      </section>
+    </div>
+
+    <script>
+      const runBtn = document.getElementById('run');
+      const output = document.getElementById('output');
+      const resultPanel = document.getElementById('result-panel');
+      const winnerBox = document.getElementById('winner-box');
+      const rationale = document.getElementById('rationale');
+      const resultTable = document.getElementById('result-table');
+      const whyList = document.getElementById('why-list');
+      const knobList = document.getElementById('knob-list');
+
+      function toMap(results) {
+        const map = {};
+        for (const row of results) map[row.pattern] = row;
+        return map;
+      }
+
+      function formatPatternName(name) {
+        if (!name) return '';
+        return name.replace('-', ' ');
+      }
+
+      function renderRows(results, winner) {
+        resultTable.innerHTML = '';
+        for (const row of results) {
+          const tr = document.createElement('tr');
+          const isWinner = row.pattern === winner;
+          tr.innerHTML = `
+            <td>${isWinner ? '🏆 ' : ''}${formatPatternName(row.pattern)}</td>
+            <td>${row.quality_score.toFixed(2)}</td>
+            <td>${row.token_estimate}</td>
+            <td>${row.latency_ms.toFixed(2)}</td>
+            <td class="${row.approved ? 'good' : ''}">${row.approved ? 'Yes' : 'No'}</td>
+          `;
+          resultTable.appendChild(tr);
+        }
+      }
+
+      function renderWhyAndKnobs(data) {
+        const map = toMap(data.results);
+        const sw = map['supervisor-worker'];
+        const db = map['debate'];
+        const qualityWeight = Number(document.getElementById('qualityWeight').value);
+        const tokenWeight = Number(document.getElementById('tokenWeight').value);
+        const latencyWeight = Number(document.getElementById('latencyWeight').value);
+        const swDeltaInput = Number(document.getElementById('swDelta').value);
+        const debateDeltaInput = Number(document.getElementById('debateDelta').value);
+        const winner = data.winner;
+        const loser = winner === 'debate' ? sw : db;
+        const winnerRow = map[winner];
+        const qualityDelta = winnerRow && loser ? (winnerRow.quality_score - loser.quality_score) : 0;
+        const tokenDelta = winnerRow && loser ? (winnerRow.token_estimate - loser.token_estimate) : 0;
+        const latencyDelta = winnerRow && loser ? (winnerRow.latency_ms - loser.latency_ms) : 0;
+
+        whyList.innerHTML = '';
+        const reasons = [
+          `Winner is ${formatPatternName(winner)} using your current weights (quality=${qualityWeight}, token penalty=${tokenWeight}, latency penalty=${latencyWeight}).`,
+          `Quality gap is ${qualityDelta.toFixed(2)} in favor of ${formatPatternName(winner)}.`,
+          `Token gap is ${tokenDelta >= 0 ? '+' : ''}${tokenDelta} tokens for ${formatPatternName(winner)} versus the other pattern (lower is better when token penalty is high).`,
+          `Latency gap is ${latencyDelta >= 0 ? '+' : ''}${latencyDelta.toFixed(2)} ms for ${formatPatternName(winner)} versus the other pattern (lower is better when latency penalty is high).`,
+        ];
+        for (const reason of reasons) {
+          const li = document.createElement('li');
+          li.textContent = reason;
+          whyList.appendChild(li);
+        }
+
+        knobList.innerHTML = '';
+        const knobs = [
+          {
+            title: 'Quality Weight (how much quality matters)',
+            desc: 'Increase this when you care most about best answer quality. This usually favors Debate in this scaffold because it starts with a slightly higher quality score.',
+          },
+          {
+            title: 'Token Penalty (how much cost matters)',
+            desc: 'Increase this to punish higher token usage. In this scaffold Debate uses more tokens, so higher token penalty tends to favor Supervisor-Worker.',
+          },
+          {
+            title: 'Latency Penalty (how much speed matters)',
+            desc: 'Increase this to favor faster patterns. The lower-latency pattern gains an advantage when this penalty is high.',
+          },
+          {
+            title: 'Quality Delta (scenario tweak, not code change)',
+            desc: `Use Supervisor Quality Delta (${swDeltaInput}) and Debate Quality Delta (${debateDeltaInput}) to simulate domains where one pattern is stronger. Positive delta boosts that pattern quality, negative delta reduces it.`,
+          },
+          {
+            title: 'Quick guide: when each pattern tends to win',
+            desc: 'Supervisor-Worker tends to win when token/latency penalties are high or supervisor quality delta is positive. Debate tends to win when quality weight is dominant and debate quality delta is positive.',
+          },
+        ];
+
+        for (const knob of knobs) {
+          const div = document.createElement('div');
+          div.className = 'knob';
+          div.innerHTML = `<strong>${knob.title}</strong><div>${knob.desc}</div>`;
+          knobList.appendChild(div);
+        }
+      }
+
+      runBtn.addEventListener('click', async () => {
+        const destination = document.getElementById('destination').value;
+        const budget = Number(document.getElementById('budget').value);
+        const approvalThreshold = Number(document.getElementById('approval').value);
+        const qualityWeight = Number(document.getElementById('qualityWeight').value);
+        const tokenWeight = Number(document.getElementById('tokenWeight').value);
+        const latencyWeight = Number(document.getElementById('latencyWeight').value);
+        const supervisorQualityDelta = Number(document.getElementById('swDelta').value);
+        const debateQualityDelta = Number(document.getElementById('debateDelta').value);
+
+        const payload = {
+          destination,
+          depart_date: '2026-08-12',
+          return_date: '2026-08-15',
+          budget,
+          approval_threshold: approvalThreshold,
+          preferences: ['morning flight'],
+          quality_weight: qualityWeight,
+          token_weight: tokenWeight,
+          latency_weight: latencyWeight,
+          supervisor_quality_delta: supervisorQualityDelta,
+          debate_quality_delta: debateQualityDelta,
+        };
+
+        const response = await fetch('/api/benchmark', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        resultPanel.style.display = 'block';
+        winnerBox.innerHTML = `<strong>${formatPatternName(data.winner)}</strong> wins this run.`;
+        rationale.textContent = data.rationale;
+        renderRows(data.results, data.winner);
+        renderWhyAndKnobs(data);
+        output.textContent = JSON.stringify(data, null, 2);
+      });
+    </script>
+  </body>
+</html>

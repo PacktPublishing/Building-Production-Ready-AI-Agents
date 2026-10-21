@@ -1,0 +1,97 @@
+{
+  "session_id": "d3f1de43-e98d-4326-98bf-0f8a5002f71f",
+  "request": {
+    "destination": "Tokyo",
+    "budget": 1800,
+    "month": "next month",
+    "travelers": 2
+  },
+  "policy": {
+    "approval_limit": 1200,
+    "blocked_limit": 2200
+  },
+  "quotes": {
+    "flight": 907,
+    "hotel": 520,
+    "insurance": 110,
+    "total": 1537
+  },
+  "status": "ready_to_resume",
+  "current_checkpoint": "approved_resume",
+  "checkpoint_ready": true,
+  "booking_reference": null,
+  "last_message": "The quoted total is $1537. That crosses the approval limit of $1200. Approve or deny the booking before resuming.",
+  "trace": [
+    {
+      "ts": "2026-06-19T12:47:59.092226+00:00",
+      "step": "system",
+      "message": "Session created.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T12:48:02.128540+00:00",
+      "step": "user",
+      "message": "Received user message.",
+      "data": {
+        "message": "Book a trip to Tokyo next month with budget 1800 for 2 travelers"
+      }
+    },
+    {
+      "ts": "2026-06-19T12:48:02.130552+00:00",
+      "step": "planner",
+      "message": "Applied extracted updates.",
+      "data": {
+        "updated_fields": [
+          "destination",
+          "budget",
+          "travelers",
+          "month"
+        ]
+      }
+    },
+    {
+      "ts": "2026-06-19T12:48:02.130552+00:00",
+      "step": "planner",
+      "message": "Gathering flight, hotel, and insurance quotes in parallel.",
+      "data": {}
+    },
+    {
+      "ts": "2026-06-19T12:48:02.134551+00:00",
+      "step": "planner",
+      "message": "Estimated travel quotes.",
+      "data": {
+        "flight": 907,
+        "hotel": 520,
+        "insurance": 110,
+        "total": 1537
+      }
+    },
+    {
+      "ts": "2026-06-19T12:48:02.137729+00:00",
+      "step": "checkpoint",
+      "message": "Saved checkpoint 'post_quote_review'.",
+      "data": {
+        "path": "C:\\Users\\chnoring\\Documents\\books\\agentic-book\\Chapter-13-Multi-Agent-Collaboration-and-Communication\\assignment\\runtime\\checkpoints\\d3f1de43-e98d-4326-98bf-0f8a5002f71f.json",
+        "checkpoint": "post_quote_review"
+      }
+    },
+    {
+      "ts": "2026-06-19T12:48:02.141689+00:00",
+      "step": "checkpoint",
+      "message": "Saved checkpoint 'awaiting_approval'.",
+      "data": {
+        "path": "C:\\Users\\chnoring\\Documents\\books\\agentic-book\\Chapter-13-Multi-Agent-Collaboration-and-Communication\\assignment\\runtime\\checkpoints\\d3f1de43-e98d-4326-98bf-0f8a5002f71f.json",
+        "checkpoint": "awaiting_approval"
+      }
+    },
+    {
+      "ts": "2026-06-19T12:48:02.141689+00:00",
+      "step": "monitor",
+      "message": "Approval gate triggered.",
+      "data": {
+        "total": 1537,
+        "approval_limit": 1200
+      }
+    }
+  ]
+}

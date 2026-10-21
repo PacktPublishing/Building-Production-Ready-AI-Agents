@@ -1,0 +1,14 @@
+[
+  {
+    "title": "Network issue",
+    "message": "My internet has been unstable all morning and Zoom keeps dropping."
+  },
+  {
+    "title": "Access issue",
+    "message": "I cannot sign in to the payroll portal and my password reset link expired."
+  },
+  {
+    "title": "General issue",
+    "message": "My laptop fan is loud and the machine feels slow after lunch."
+  }
+]
