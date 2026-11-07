@@ -7,7 +7,7 @@
     "dev": "node --watch api.js"
   },
   "dependencies": {
-    "express": "^4.21.2",
+    "express": "^4.22.3",
     "ollama": "^0.5.0",
     "sql.js": "^1.14.1"
   }
